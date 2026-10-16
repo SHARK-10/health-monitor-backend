@@ -115,5 +115,47 @@ const getMe = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
 
-module.exports = { registerUser, loginUser, getMe };
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Allowed updatable fields
+    const allowed = [
+      "name",
+      "age",
+      "gender",
+      "height",
+      "currentWeight",
+      "activityLevel",
+    ];
+
+    allowed.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        user[field] = req.body[field];
+      }
+    });
+
+    const updated = await user.save();
+
+    res.json({
+      _id: updated._id,
+      name: updated.name,
+      email: updated.email,
+      age: updated.age,
+      gender: updated.gender,
+      height: updated.height,
+      currentWeight: updated.currentWeight,
+      activityLevel: updated.activityLevel,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+module.exports = { registerUser, loginUser, getMe, updateProfile };
