@@ -38,7 +38,7 @@ app.use("/api/health", require("./routes/healthRoutes"));
 app.use("/api/meals", require("./routes/mealRoutes"));
 app.use("/api/water", require("./routes/waterRoutes"));
 app.use("/api/weight", require("./routes/weightRoutes"));
-
+app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
